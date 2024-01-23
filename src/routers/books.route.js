@@ -4,6 +4,8 @@ const booksController = require("../controllers/books.controller");
 const booksRouter = Router();
 const { memoryUpload, errorHandler } = require("../middlewares/memoryUpload");
 
+booksRouter.get("/", booksController.getAllBook);
+
 booksRouter.post(
   "/create-book",
   (req, res, next) =>

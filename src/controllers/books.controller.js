@@ -3,6 +3,15 @@ const response = require("../helpers/response");
 const crypto = require("crypto");
 const { uploader } = require("../utils/cloudinary");
 
+const getAllBook = async (req, res) => {
+  try {
+    const result = await bookModels.getAllBook();
+    response(res, 200, "Succesfully get book", result.rows);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const insertBook = async (req, res) => {
   try {
     let fileLink;
@@ -60,4 +69,5 @@ const insertBook = async (req, res) => {
 
 module.exports = {
   insertBook,
+  getAllBook,
 };
