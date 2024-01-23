@@ -4,8 +4,9 @@ const crypto = require("crypto");
 const { uploader } = require("../utils/cloudinary");
 
 const getAllBook = async (req, res) => {
+  console.log(req.query);
   try {
-    const result = await bookModels.getAllBook();
+    const result = await bookModels.getAllBook(req.query);
     response(res, 200, "Succesfully get book", result.rows);
   } catch (error) {
     console.log(error);
@@ -92,7 +93,7 @@ const updateBook = async (req, res) => {
 
     if (req.file) {
       const cloudResult = await cloudUpload(req, res, {
-        prefix: "book",
+        prefix: "books",
         id: req.params.id,
       });
       fileLink = cloudResult.secure_url;
@@ -130,9 +131,26 @@ const updateBook = async (req, res) => {
   }
 };
 
+const deleteBook = async (req, res) => {
+  const bookId = req.params.id;
+
+  try {
+    const deleteBook = await bookModels.deleteBook(bookId);
+
+    if (deleteBook !== null) {
+      return response(res, 200, "Deleted Successfully ", deleteBook);
+    } else {
+      return response(res, 404, "Book Not found");
+    }
+  } catch (error) {
+    return response(res, 500, "Internal Server error");
+  }
+};
+
 module.exports = {
   insertBook,
   getAllBook,
   cloudUpload,
   updateBook,
+  deleteBook,
 };

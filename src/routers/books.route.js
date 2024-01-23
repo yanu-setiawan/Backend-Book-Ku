@@ -25,4 +25,5 @@ booksRouter.patch(
   //   productsController.patchImageProducts
 );
 
+booksRouter.delete("/:id", booksController.deleteBook);
 module.exports = booksRouter;
