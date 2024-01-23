@@ -15,4 +15,14 @@ booksRouter.post(
   booksController.insertBook
 );
 
+booksRouter.patch(
+  "/:id",
+  (req, res, next) =>
+    memoryUpload.single("image_url")(req, res, (err) => {
+      errorHandler(err, res, next);
+    }),
+  booksController.updateBook
+  //   productsController.patchImageProducts
+);
+
 module.exports = booksRouter;

@@ -85,7 +85,7 @@ const deleteCategory = (categoryId) => {
 const getBookByCategory = (categoryId) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT b.id,title,description,image_url as image,release_year,total_page,thickness,price,category_id, c.name as category_name,b.created_at,b.update_at FROM book b JOIN categories c ON b.category_id = c.id WHERE c.id = $1",
+      "SELECT b.id,title,description,image_url as image,release_year,total_page,thickness,price,category_id, c.name as category_name,b.created_at,b.updated_at FROM book b JOIN categories c ON b.category_id = c.id WHERE c.id = $1",
       [categoryId],
       (error, result) => {
         if (error) {

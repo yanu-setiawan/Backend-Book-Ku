@@ -17,14 +17,10 @@ const insertBook = async (req, res) => {
     let fileLink;
     // console.log(req.body);
     if (req.file) {
-      // Unggah file ke cloud
-      // generate a random string of length 10
       const randomString = crypto.randomBytes(5).toString("hex");
 
       // get the file extension
       const ext = req.file.originalname.split(".").pop();
-
-      // create a filename using the random string and file extension
       const filename = `${randomString}.${ext}`;
 
       const { data, err, msg } = await uploader(req, "book", randomString);
@@ -32,9 +28,15 @@ const insertBook = async (req, res) => {
       if (!data) return res.status(200).json({ msg: "No File Uploaded" });
 
       fileLink = data.secure_url;
-      //   console.log("fl", fileLink);
     }
     const { body } = req;
+
+    const releaseYear = parseInt(body.release_year, 10);
+    if (isNaN(releaseYear) || releaseYear < 1980 || releaseYear > 2021) {
+      return res.status(400).json({
+        msg: "Invalid release year. Please provide a value between 1980 and 2021.",
+      });
+    }
 
     console.log(body);
 
@@ -67,7 +69,70 @@ const insertBook = async (req, res) => {
   }
 };
 
+const cloudUpload = async (req, res) => {
+  try {
+    // upload ke cloud
+    const { params } = req;
+    const { data, err, msg } = await uploader(req, "books", params.id);
+    if (err) throw { msg, err };
+    if (!data) return res.status(200).json({ msg: "No File Uploaded" });
+    return data;
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({
+      msg: "Internal Server Error",
+    });
+  }
+  // console.log(error)
+};
+
+const updateBook = async (req, res) => {
+  try {
+    let fileLink;
+
+    if (req.file) {
+      const cloudResult = await cloudUpload(req, res, {
+        prefix: "book",
+        id: req.params.id,
+      });
+      fileLink = cloudResult.secure_url;
+    }
+
+    const { params, body } = req;
+
+    // Calculate thickness based on total_page
+    let thickness = "";
+    if (body.total_page <= 100) {
+      thickness = "Tipis";
+    } else if (body.total_page > 100 && body.total_page <= 200) {
+      thickness = "Sedang";
+    } else {
+      thickness = "Tebal";
+    }
+
+    // Set updated_at field in the body
+    body.updated_at = new Date().toISOString();
+
+    // Include thickness in the body
+    body.thickness = thickness;
+
+    const result = await bookModels.updateBook(params, body, fileLink);
+
+    res.status(200).json({
+      data: result.rows,
+      msg: "Update successful",
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({
+      msg: "Internal server error",
+    });
+  }
+};
+
 module.exports = {
   insertBook,
   getAllBook,
+  cloudUpload,
+  updateBook,
 };
