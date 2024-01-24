@@ -44,6 +44,7 @@ const insertUsers = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { body } = req;
+    console.log(body);
     const result = await userModel.loginUser(body.email);
     if (result.rows.length < 1)
       return res.status(401).json({

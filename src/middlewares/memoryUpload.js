@@ -3,7 +3,7 @@ const path = require("path");
 const storage = multer.memoryStorage();
 
 const limits = {
-  fileSize: 2 * 1024 * 1024, // 2 MB
+  fileSize: 5 * 1024 * 1024, // 2 MB
 };
 
 const fileFilter = (req, file, cb) => {
