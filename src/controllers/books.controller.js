@@ -154,7 +154,7 @@ const getBookDetail = async (req, res) => {
     if (result.rows.length === 0) {
       res.status(404).json({
         data: result.rows,
-        msg: "Product not found",
+        msg: "Book not found",
       });
       return;
     }

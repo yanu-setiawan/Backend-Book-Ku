@@ -106,10 +106,33 @@ const getBookByCategory = async (req, res) => {
   }
 };
 
+const getCtgDetail = async (req, res) => {
+  try {
+    const { params } = req;
+    const result = await categoriesModel.getDetailCtg(params.id);
+    if (result.rows.length === 0) {
+      res.status(404).json({
+        data: result.rows,
+        msg: "Categories not found",
+      });
+      return;
+    }
+    res.status(200).json({
+      data: result.rows,
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({
+      msg: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   createCategory,
   updateCategory,
   deleteCategory,
   getCategory,
   getBookByCategory,
+  getCtgDetail,
 };

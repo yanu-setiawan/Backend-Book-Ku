@@ -8,6 +8,7 @@ categoriesRouter.get("/", categoriesController.getCategory);
 categoriesRouter.post("/create-ctg", categoriesController.createCategory);
 categoriesRouter.patch("/:id", categoriesController.updateCategory);
 categoriesRouter.delete("/:id", categoriesController.deleteCategory);
+categoriesRouter.get("/:id", categoriesController.getCtgDetail);
 categoriesRouter.get("/:id/books", categoriesController.getBookByCategory);
 
 module.exports = categoriesRouter;

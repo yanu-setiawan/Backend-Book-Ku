@@ -98,10 +98,25 @@ const getBookByCategory = (categoryId) => {
   });
 };
 
+const getDetailCtg = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql = "select * from categories WHERE id = $1";
+    const values = [id];
+    db.query(sql, values, (error, result) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(result);
+    });
+  });
+};
+
 module.exports = {
   createCategory,
   updateCategory,
   deleteCategory,
   getCategory,
   getBookByCategory,
+  getDetailCtg,
 };
