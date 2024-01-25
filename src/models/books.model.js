@@ -157,9 +157,24 @@ const deleteBook = (id) => {
   });
 };
 
+const getDetailBook = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql = "select * from book WHERE id = $1";
+    const values = [id];
+    db.query(sql, values, (error, result) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(result);
+    });
+  });
+};
+
 module.exports = {
   insertBook,
   getAllBook,
   updateBook,
   deleteBook,
+  getDetailBook,
 };

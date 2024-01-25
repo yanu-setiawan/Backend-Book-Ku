@@ -26,4 +26,5 @@ booksRouter.patch(
 );
 
 booksRouter.delete("/:id", booksController.deleteBook);
+booksRouter.get("/:id", booksController.getBookDetail);
 module.exports = booksRouter;

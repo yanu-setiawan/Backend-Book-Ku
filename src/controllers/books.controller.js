@@ -147,10 +147,33 @@ const deleteBook = async (req, res) => {
   }
 };
 
+const getBookDetail = async (req, res) => {
+  try {
+    const { params } = req;
+    const result = await bookModels.getDetailBook(params.id);
+    if (result.rows.length === 0) {
+      res.status(404).json({
+        data: result.rows,
+        msg: "Product not found",
+      });
+      return;
+    }
+    res.status(200).json({
+      data: result.rows,
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({
+      msg: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   insertBook,
   getAllBook,
   cloudUpload,
   updateBook,
   deleteBook,
+  getBookDetail,
 };
