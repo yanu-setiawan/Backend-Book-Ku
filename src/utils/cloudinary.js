@@ -15,7 +15,6 @@ const uploader = async (req, prefix, id) => {
   const fileName = `${prefix}-${file.fieldname}-${id}`;
 
   try {
-    // upload ke cloudinary
     const result = await cloudinary.uploader.upload(datauri.content, {
       public_id: fileName,
       folder: "books",
